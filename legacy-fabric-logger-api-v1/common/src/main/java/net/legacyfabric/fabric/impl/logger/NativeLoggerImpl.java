@@ -32,22 +32,6 @@ public class NativeLoggerImpl implements Logger {
 	private LogCategory category;
 
 	public NativeLoggerImpl(String context, String... subs) {
-		try { // Loader 0.14.3+
-			tryCreatingLogger(context, subs);
-		} catch (NoSuchMethodError e) { // Loader 0.13+
-			List<String> parts = new ArrayList<>();
-			parts.add(context);
-			Collections.addAll(parts, subs);
-
-			try {
-				this.category = LogCategory.class.getDeclaredConstructor(String[].class).newInstance(parts.toArray(new String[0]));
-			} catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-	}
-
-	private void tryCreatingLogger(String context, String... subs) throws NoSuchMethodError {
 		this.category = LogCategory.createCustom(context, subs);
 	}
 
