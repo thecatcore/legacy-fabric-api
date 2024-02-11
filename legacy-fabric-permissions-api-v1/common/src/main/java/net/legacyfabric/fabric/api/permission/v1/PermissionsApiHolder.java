@@ -17,7 +17,6 @@
 
 package net.legacyfabric.fabric.api.permission.v1;
 
-import net.legacyfabric.fabric.impl.logger.LoggerHelper;
 import org.jetbrains.annotations.ApiStatus;
 
 import net.minecraft.client.MinecraftClient;
@@ -28,6 +27,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 
 import net.legacyfabric.fabric.api.logger.v1.Logger;
+import net.legacyfabric.fabric.impl.logger.LoggerHelper;
 
 /**
  * @deprecated Unstable API, may change in the future.

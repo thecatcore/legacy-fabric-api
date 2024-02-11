@@ -24,12 +24,12 @@ import java.util.function.IntSupplier;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import net.legacyfabric.fabric.impl.logger.LoggerHelper;
 import net.minecraft.nbt.NbtCompound;
 
 import net.legacyfabric.fabric.api.logger.v1.Logger;
 import net.legacyfabric.fabric.api.registry.v1.RegistryHelper;
 import net.legacyfabric.fabric.api.util.Identifier;
+import net.legacyfabric.fabric.impl.logger.LoggerHelper;
 import net.legacyfabric.fabric.impl.registry.RegistryHelperImpl;
 import net.legacyfabric.fabric.impl.registry.sync.compat.IdListCompat;
 import net.legacyfabric.fabric.impl.registry.sync.compat.SimpleRegistryCompat;
