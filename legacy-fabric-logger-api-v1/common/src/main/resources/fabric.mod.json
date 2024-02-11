@@ -16,8 +16,7 @@
     "FabricMC"
   ],
   "depends": {
-    "fabricloader": ">=0.14",
-    "legacy-fabric-api-base-common": "*"
+    "fabricloader": ">=0.14"
   },
   "description": "Friendly logger api built on top of fabric loader internal's",
   "custom": {
