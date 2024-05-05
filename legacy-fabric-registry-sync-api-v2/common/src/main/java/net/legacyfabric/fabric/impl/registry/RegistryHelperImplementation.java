@@ -17,24 +17,44 @@
 
 package net.legacyfabric.fabric.impl.registry;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
+
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.PacketByteBuf;
 
 import net.legacyfabric.fabric.api.event.Event;
 import net.legacyfabric.fabric.api.event.EventFactory;
+import net.legacyfabric.fabric.api.networking.v1.PacketByteBufs;
+import net.legacyfabric.fabric.api.registry.v2.RegistryIds;
+import net.legacyfabric.fabric.api.registry.v2.event.RegistryBeforeAddCallback;
+import net.legacyfabric.fabric.api.registry.v2.event.RegistryEntryAddedCallback;
 import net.legacyfabric.fabric.api.registry.v2.event.RegistryInitializedEvent;
+import net.legacyfabric.fabric.api.registry.v2.event.RegistryRemapCallback;
+import net.legacyfabric.fabric.api.registry.v2.registry.SyncedRegistry;
 import net.legacyfabric.fabric.api.registry.v2.registry.holder.Registry;
 import net.legacyfabric.fabric.api.registry.v2.registry.registrable.Registrable;
 import net.legacyfabric.fabric.api.registry.v2.registry.registrable.SyncedRegistrable;
 import net.legacyfabric.fabric.api.util.Identifier;
 import net.legacyfabric.fabric.api.util.VersionUtils;
+import net.legacyfabric.fabric.impl.networking.PacketByteBufExtension;
 import net.legacyfabric.fabric.impl.registry.accessor.RegistryIdSetter;
 
 public class RegistryHelperImplementation {
+	public static final Identifier PACKET_ID = new Identifier("legacy-fabric-api:registry_remap");
 	public static final boolean hasFlatteningBegun = VersionUtils.matches(">=1.8 <=1.12.2");
 	public static final Map<Identifier, Event<RegistryInitializedEvent>> INITIALIZATION_EVENTS = new HashMap<>();
 	private static final Map<Identifier, Registry<?>> REGISTRIES = new HashMap<>();
+	private static final Map<Identifier, RegistryRemapper<?>> REMAPPERS = new HashMap<>();
+	private static final List<Consumer<Identifier>> REGISTRY_REGISTERED = new ArrayList<>();
+
+	public static void registerRegisterEvent(Consumer<Identifier> callback) {
+		REGISTRY_REGISTERED.add(callback);
+	}
 
 	public static Event<RegistryInitializedEvent> getInitializationEvent(Identifier registryId) {
 		Event<RegistryInitializedEvent> event;
@@ -62,14 +82,43 @@ public class RegistryHelperImplementation {
 		return (Registry<T>) REGISTRIES.get(identifier);
 	}
 
-	public static void registerRegistry(Identifier identifier, Registry<?> holder) {
+	public static <T> void registerRegistry(Identifier identifier, Registry<T> holder) {
 		if (REGISTRIES.containsKey(identifier)) throw new IllegalArgumentException("Attempted to register registry " + identifier.toString() + " twices!");
 		REGISTRIES.put(identifier, holder);
 
 		if (holder instanceof RegistryIdSetter) ((RegistryIdSetter) holder).fabric$setId(identifier);
+
+		if (holder instanceof SyncedRegistry) {
+			REMAPPERS.put(identifier, new RegistryRemapper<>((SyncedRegistry<?>) holder));
+		}
+
+		REGISTRY_REGISTERED.forEach(c -> c.accept(identifier));
+
+		getInitializationEvent(identifier).invoker().initialized(holder);
+
+		holder.fabric$getBeforeAddedCallback().register((rawId, id, object) -> {
+			Event<RegistryBeforeAddCallback<T>> event = (Event<RegistryBeforeAddCallback<T>>) (Object) RegistryEventHelper.IDENTIFIER_BEFORE_MAP.get(identifier);
+
+			if (event != null) event.invoker().onEntryAdding(rawId, id, object);
+		});
+
+		holder.fabric$getEntryAddedCallback().register((rawId, id, object) -> {
+			Event<RegistryEntryAddedCallback<T>> event = (Event<RegistryEntryAddedCallback<T>>) (Object) RegistryEventHelper.IDENTIFIER_ADDED_MAP.get(identifier);
+
+			if (event != null) event.invoker().onEntryAdded(rawId, id, object);
+		});
+
+		if (holder instanceof SyncedRegistry) {
+			((SyncedRegistry<T>) holder).fabric$getRegistryRemapCallback().register(changedIdsMap -> {
+				Event<RegistryRemapCallback<T>> event = (Event<RegistryRemapCallback<T>>) (Object) RegistryEventHelper.IDENTIFIER_REMAP_MAP.get(identifier);
+
+				if (event != null) event.invoker().callback(changedIdsMap);
+			});
+		}
 	}
 
 	public static <T> void register(Registry<T> registry, Identifier identifier, T value) {
+		if (registry == null) throw new IllegalArgumentException("Can't register to a null registry!");
 		if (!(registry instanceof Registrable)) throw new IllegalArgumentException("Can't register object to non registrable registry " + registry.fabric$getId());
 
 		Registrable<T> registrable = (Registrable<T>) registry;
@@ -83,6 +132,7 @@ public class RegistryHelperImplementation {
 	}
 
 	public static <T> T register(Registry<T> registry, Identifier identifier, Function<Integer, T> valueConstructor) {
+		if (registry == null) throw new IllegalArgumentException("Can't register to a null registry!");
 		if (!(registry instanceof SyncedRegistrable)) throw new IllegalArgumentException("Can't register object to non registrable registry " + registry.fabric$getId());
 
 		SyncedRegistrable<T> registrable = (SyncedRegistrable<T>) registry;
@@ -93,5 +143,56 @@ public class RegistryHelperImplementation {
 		registrable.fabric$register(computedId, identifier, value);
 
 		return value;
+	}
+
+	public static void remapRegistries() {
+		for (RegistryRemapper<?> remapper : REMAPPERS.values()) {
+			remapper.remap();
+		}
+	}
+
+	public static void readAndRemap(NbtCompound compound) {
+		for (String key : compound.getKeys()) {
+			String registryKey = key;
+
+			if (BACKWARD_COMPATIBILITY.containsKey(key)) {
+				registryKey = BACKWARD_COMPATIBILITY.get(key);
+			}
+
+			Identifier identifier = new Identifier(registryKey);
+			RegistryRemapper<?> remapper = REMAPPERS.get(identifier);
+
+			if (remapper != null) {
+				remapper.readNbt(compound.getCompound(key));
+			}
+		}
+
+		remapRegistries();
+	}
+
+	private static final Map<String, String> BACKWARD_COMPATIBILITY = new HashMap<>();
+	static {
+		BACKWARD_COMPATIBILITY.put("Items", RegistryIds.ITEMS.toString());
+		BACKWARD_COMPATIBILITY.put("Blocks", RegistryIds.BLOCKS.toString());
+		BACKWARD_COMPATIBILITY.put("Biomes", RegistryIds.BIOMES.toString());
+		BACKWARD_COMPATIBILITY.put("BlockEntityTypes", RegistryIds.BLOCK_ENTITY_TYPES.toString());
+		BACKWARD_COMPATIBILITY.put("Enchantments", RegistryIds.ENCHANTMENTS.toString());
+		BACKWARD_COMPATIBILITY.put("EntityTypes", RegistryIds.ENTITY_TYPES.toString());
+		BACKWARD_COMPATIBILITY.put("StatusEffects", RegistryIds.STATUS_EFFECTS.toString());
+	}
+
+	public static NbtCompound toNbt() {
+		NbtCompound compound = new NbtCompound();
+
+		for (Map.Entry<Identifier, RegistryRemapper<?>> entry : REMAPPERS.entrySet()) {
+			compound.put(entry.getKey().toString(), entry.getValue().toNbt());
+		}
+
+		return compound;
+	}
+
+	public static PacketByteBuf createBuf() {
+		PacketByteBuf buf = PacketByteBufs.create();
+		return ((PacketByteBufExtension) buf).writeCompound(toNbt());
 	}
 }
