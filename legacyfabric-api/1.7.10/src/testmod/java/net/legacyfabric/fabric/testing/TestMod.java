@@ -17,18 +17,13 @@
 
 package net.legacyfabric.fabric.testing;
 
-import java.util.concurrent.ThreadLocalRandom;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.itemgroup.ItemGroup;
 
 import net.fabricmc.api.ModInitializer;
 
 import net.legacyfabric.fabric.api.registry.v1.RegistryHelper;
-import net.legacyfabric.fabric.api.resource.ItemModelRegistry;
 import net.legacyfabric.fabric.api.util.Identifier;
 
 public class TestMod implements ModInitializer {
@@ -38,18 +33,17 @@ public class TestMod implements ModInitializer {
 	}
 
 	private void registerItem() {
-		Block concBlock = new Block(Material.STONE).setItemGroup(ItemGroup.FOOD);
-		Block concBlock2 = new Block(Material.GLASS).setItemGroup(ItemGroup.FOOD);
-		Block[] blocks = ThreadLocalRandom.current().nextBoolean() ? new Block[] {concBlock, concBlock2} : new Block[] {concBlock2, concBlock};
+//		Block concBlock = new Block(Material.STONE).setItemGroup(ItemGroup.FOOD);
+//		Block concBlock2 = new Block(Material.GLASS).setItemGroup(ItemGroup.FOOD);
+//		Block[] blocks = ThreadLocalRandom.current().nextBoolean() ? new Block[] {concBlock, concBlock2} : new Block[] {concBlock2, concBlock};
+//
+//		for (Block block : blocks) {
+//			Identifier identifier = new Identifier("legacy-fabric-api:conc_block_" + block.getMaterial().getColor().color);
+//			RegistryHelper.registerBlock(block, identifier);
+//			RegistryHelper.registerItem(new BlockItem(block), identifier);
+//		}
 
-		for (Block block : blocks) {
-			Identifier identifier = new Identifier("legacy-fabric-api:conc_block_" + block.getMaterial().getColor().color);
-			RegistryHelper.registerBlock(block, identifier);
-			RegistryHelper.registerItem(new BlockItem(block), identifier);
-		}
-
-		Item testItem = new Item().setItemGroup(ItemGroup.FOOD);
+		Item testItem = new Item().setItemGroup(ItemGroup.FOOD).getFromId("legacy-fabric-api:test_item");
 		RegistryHelper.registerItem(testItem, new Identifier("legacy-fabric-api", "test_item"));
-		ItemModelRegistry.registerItemModel(testItem, new Identifier("legacy-fabric-api:test_item"));
 	}
 }
