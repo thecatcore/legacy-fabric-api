@@ -30,6 +30,7 @@ import net.minecraft.util.registry.SimpleRegistry;
 
 import net.legacyfabric.fabric.api.registry.v2.RegistryHelper;
 import net.legacyfabric.fabric.api.registry.v2.RegistryIds;
+import net.legacyfabric.fabric.api.registry.v2.registry.registrable.DesynchronizeableRegistrable;
 
 @Mixin(BlockEntity.class)
 public class BlockEntityMixin {
@@ -39,6 +40,7 @@ public class BlockEntityMixin {
 
 	@Inject(method = "<clinit>", at = @At("RETURN"))
 	private static void registerRegistry(CallbackInfo ci) {
+		((DesynchronizeableRegistrable) BLOCK_ENTITY).setSynchronize(false);
 		RegistryHelper.addRegistry(RegistryIds.BLOCK_ENTITY_TYPES, BLOCK_ENTITY);
 	}
 }
