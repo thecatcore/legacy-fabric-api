@@ -15,21 +15,9 @@
  * limitations under the License.
  */
 
-package net.legacyfabric.fabric.mixin.registry.sync.client;
+package net.legacyfabric.fabric.api.registry.v2.registry;
 
-import org.spongepowered.asm.mixin.Mixin;
+import net.legacyfabric.fabric.api.registry.v2.registry.registrable.SyncedRegistrable;
 
-import net.minecraft.client.MinecraftClient;
-
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
-
-@Environment(EnvType.CLIENT)
-@Mixin(MinecraftClient.class)
-public class MinecraftClientMixin {
-//	@Inject(method = "<clinit>", at = @At("RETURN"))
-//	private static void remapperInit(CallbackInfo ci) {
-//		ClientRegistryRemapper.getInstance();
-//	}
+public interface SyncedRegistrableRegistry<T> extends net.legacyfabric.fabric.api.registry.v2.registry.holder.SyncedRegistry<T>, SyncedRegistrable<T> {
 }
