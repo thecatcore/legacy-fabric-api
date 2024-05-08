@@ -9,8 +9,6 @@
     "SimpleRegistryMixin",
     "PacketByteBufMixin",
     "MutableRegistryMixin",
-    "BlockEntityAccessor",
-    "BlockEntityMixin",
     "StatusEffectAccessor",
     "EnchantmentAccessor",
     "BiomeAccessor",

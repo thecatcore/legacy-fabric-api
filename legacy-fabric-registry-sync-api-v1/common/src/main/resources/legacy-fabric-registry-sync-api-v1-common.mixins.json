@@ -7,7 +7,6 @@
   },
   "mixins": [
     "IdListMixin",
-    "registry.BlockEntityMixin",
     "registry.StatusEffectMixin",
     "registry.EnchantmentMixin",
     "registry.BiomeMixin",

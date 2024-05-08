@@ -25,7 +25,6 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import org.jetbrains.annotations.ApiStatus;
 
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffect;
@@ -79,12 +78,6 @@ public class RegistryHelperImpl {
 		remapper.register(rawId, id, instance);
 
 		return instance;
-	}
-
-	public static Class<? extends BlockEntity> registerBlockEntityType(Class<? extends BlockEntity> blockEntityClass, Identifier id) {
-		register(blockEntityClass, id, RegistryIds.BLOCK_ENTITY_TYPES);
-
-		return blockEntityClass;
 	}
 
 	public static Class<? extends Entity> registerEntityType(Class<? extends Entity> entityTypeClass, Identifier id) {
