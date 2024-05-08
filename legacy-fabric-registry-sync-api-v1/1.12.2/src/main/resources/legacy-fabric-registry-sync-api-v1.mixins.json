@@ -10,7 +10,6 @@
     "class_2929Mixin",
     "PacketByteBufMixin",
     "MutableRegistryMixin",
-    "BlockEntityAccessor",
     "BiomeAccessor",
     "EntityTypeAccessor"
   ],

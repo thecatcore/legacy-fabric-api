@@ -8,8 +8,6 @@
   "mixins": [
     "SimpleRegistryMixin",
     "PacketByteBufMixin",
-    "BlockEntityAccessor",
-    "BlockEntityMixin",
     "StatusEffectAccessor",
     "EnchantmentAccessor",
     "BiomeAccessor",
