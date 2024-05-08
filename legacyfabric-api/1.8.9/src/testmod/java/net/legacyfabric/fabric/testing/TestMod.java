@@ -18,6 +18,12 @@
 package net.legacyfabric.fabric.testing;
 
 
+import java.util.concurrent.ThreadLocalRandom;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.itemgroup.ItemGroup;
 
@@ -34,15 +40,15 @@ public class TestMod implements ModInitializer {
 	}
 
 	private void registerItem() {
-//		Block concBlock = new Block(Material.STONE, MaterialColor.BLACK).setItemGroup(ItemGroup.FOOD);
-//		Block concBlock2 = new Block(Material.STONE, MaterialColor.BLUE).setItemGroup(ItemGroup.FOOD);
-//		Block[] blocks = ThreadLocalRandom.current().nextBoolean() ? new Block[] {concBlock, concBlock2} : new Block[] {concBlock2, concBlock};
-//
-//		for (Block block : blocks) {
-//			Identifier identifier = new Identifier("legacy-fabric-api", "conc_block_" + block.getMaterialColor(block.getDefaultState()).color);
-//			RegistryHelper.registerBlock(block, identifier);
-//			RegistryHelper.registerItem(new BlockItem(block), identifier);
-//		}
+		Block concBlock = new Block(Material.STONE, MaterialColor.BLACK).setItemGroup(ItemGroup.FOOD);
+		Block concBlock2 = new Block(Material.STONE, MaterialColor.BLUE).setItemGroup(ItemGroup.FOOD);
+		Block[] blocks = ThreadLocalRandom.current().nextBoolean() ? new Block[] {concBlock, concBlock2} : new Block[] {concBlock2, concBlock};
+
+		for (Block block : blocks) {
+			Identifier identifier = new Identifier("legacy-fabric-api", "conc_block_" + block.getMaterialColor(block.getDefaultState()).color);
+			RegistryHelper.registerBlock(block, identifier);
+			RegistryHelper.registerItem(new BlockItem(block), identifier);
+		}
 
 		Item testItem = new Item().setItemGroup(ItemGroup.FOOD);
 		RegistryHelper.registerItem(testItem, new Identifier("legacy-fabric-api", "test_item"));

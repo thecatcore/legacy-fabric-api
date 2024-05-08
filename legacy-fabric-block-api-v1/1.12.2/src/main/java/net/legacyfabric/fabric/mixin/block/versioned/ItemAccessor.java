@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package net.legacyfabric.fabric.mixin.item.versioned;
+package net.legacyfabric.fabric.mixin.block.versioned;
 
 import java.util.Map;
 

@@ -8,7 +8,6 @@
   "mixins": [
     "MinecraftServerMixin",
     "IdListMixin",
-    "registry.BlockMixin",
     "registry.BlockEntityMixin",
     "registry.StatusEffectMixin",
     "registry.EnchantmentMixin",

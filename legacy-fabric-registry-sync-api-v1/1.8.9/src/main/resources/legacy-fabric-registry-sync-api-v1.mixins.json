@@ -7,8 +7,6 @@
   },
   "mixins": [
     "SimpleRegistryMixin",
-    "BlockMixin",
-    "ItemMixin",
     "PacketByteBufMixin",
     "MutableRegistryMixin",
     "BlockEntityAccessor",

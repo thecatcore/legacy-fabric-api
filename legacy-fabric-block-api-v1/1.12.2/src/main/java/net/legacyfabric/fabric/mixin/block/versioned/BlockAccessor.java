@@ -15,27 +15,19 @@
  * limitations under the License.
  */
 
-package net.legacyfabric.fabric.mixin.registry.sync;
+package net.legacyfabric.fabric.mixin.block.versioned;
 
-import java.util.Map;
-
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.collection.IdList;
 
-import net.legacyfabric.fabric.impl.registry.sync.compat.ItemCompat;
+@Mixin(Block.class)
+public interface BlockAccessor {
+	@Accessor
+	static void setBLOCK_STATES(IdList<BlockState> blockStates) {
 
-@Mixin(Item.class)
-public class ItemMixin implements ItemCompat {
-	@Shadow
-	@Final
-	private static Map<Block, Item> BLOCK_ITEMS;
-
-	@Override
-	public Map<Block, Item> getBLOCK_ITEMS() {
-		return BLOCK_ITEMS;
 	}
 }

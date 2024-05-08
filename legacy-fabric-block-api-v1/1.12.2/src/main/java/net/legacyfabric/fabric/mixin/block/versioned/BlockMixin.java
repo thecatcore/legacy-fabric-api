@@ -15,29 +15,30 @@
  * limitations under the License.
  */
 
-package net.legacyfabric.fabric.mixin.registry.sync;
+package net.legacyfabric.fabric.mixin.block.versioned;
 
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.collection.IdList;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.BiDefaultedRegistry;
 
-import net.legacyfabric.fabric.impl.registry.sync.compat.BlockCompat;
-import net.legacyfabric.fabric.impl.registry.sync.compat.IdListCompat;
+import net.legacyfabric.fabric.api.registry.v2.RegistryHelper;
+import net.legacyfabric.fabric.api.registry.v2.RegistryIds;
 
 @Mixin(Block.class)
-public class BlockMixin implements BlockCompat {
-	@Mutable
+public class BlockMixin {
 	@Shadow
 	@Final
-	public static IdList BLOCK_STATES;
+	public static BiDefaultedRegistry<Identifier, Block> REGISTRY;
 
-	@Override
-	public void setBLOCK_STATES(IdListCompat<BlockState> block_states) {
-		BLOCK_STATES = (IdList) block_states;
+	@Inject(method = "setup", at = @At("RETURN"))
+	private static void registerRegistry(CallbackInfo ci) {
+		RegistryHelper.addRegistry(RegistryIds.BLOCKS, REGISTRY);
 	}
 }

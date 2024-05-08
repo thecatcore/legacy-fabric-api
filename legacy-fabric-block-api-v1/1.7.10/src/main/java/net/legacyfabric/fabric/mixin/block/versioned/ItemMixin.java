@@ -15,34 +15,34 @@
  * limitations under the License.
  */
 
-package net.legacyfabric.fabric.mixin.registry.sync.registry;
+package net.legacyfabric.fabric.mixin.block.versioned;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.Block;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.item.Item;
 
-import net.legacyfabric.fabric.impl.registry.RegistryHelperImpl;
-import net.legacyfabric.fabric.impl.registry.sync.remappers.BlockRegistryRemapper;
+import net.legacyfabric.fabric.api.registry.v2.RegistryHelper;
+import net.legacyfabric.fabric.api.util.Identifier;
 
-@Mixin(Block.class)
-public class BlockMixin {
-	@Inject(method = "setup", at = @At("RETURN"))
-	private static void initRegistryRemapper(CallbackInfo ci) {
-		RegistryHelperImpl.registerRegistryRemapper(BlockRegistryRemapper::new);
+@Mixin(Item.class)
+public class ItemMixin {
+	@Inject(method = "fromBlock", at = @At("HEAD"), cancellable = true)
+	private static void fixItemFromBlock(Block block, CallbackInfoReturnable<Item> cir) {
+		Identifier identifier = RegistryHelper.getId(Block.REGISTRY, block);
 
-		if (!RegistryHelperImpl.bootstrap) {
-			try {
-				Class.forName(StatusEffect.class.getName());
+		if (identifier != null) {
+			Item item = RegistryHelper.<Item>getValue(Item.REGISTRY, identifier);
 
-				Class.forName(Enchantment.class.getName());
-			} catch (ClassNotFoundException e) {
-				throw new RuntimeException(e);
+			if (item != null) {
+				cir.setReturnValue(item);
+				return;
 			}
 		}
+
+		cir.setReturnValue(null);
 	}
 }
