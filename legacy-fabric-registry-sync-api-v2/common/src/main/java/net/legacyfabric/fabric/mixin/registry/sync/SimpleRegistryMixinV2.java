@@ -21,8 +21,8 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import net.minecraft.util.registry.SimpleRegistry;
 
-import net.legacyfabric.fabric.api.registry.v2.registry.SyncedRegistry;
+import net.legacyfabric.fabric.api.registry.v2.registry.SyncedRegistrableRegistry;
 
 @Mixin(SimpleRegistry.class)
-public abstract class SimpleRegistryMixinV2<K, V> implements SyncedRegistry<V> {
+public abstract class SimpleRegistryMixinV2<K, V> implements SyncedRegistrableRegistry<V> {
 }
