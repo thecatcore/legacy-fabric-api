@@ -15,22 +15,30 @@
  * limitations under the License.
  */
 
-package net.legacyfabric.fabric.mixin.registry.sync.registry;
+package net.legacyfabric.fabric.mixin.effect;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.SimpleRegistry;
 
-import net.legacyfabric.fabric.impl.registry.RegistryHelperImpl;
-import net.legacyfabric.fabric.impl.registry.sync.remappers.StatusEffectRegistryRemapper;
+import net.legacyfabric.fabric.api.registry.v2.RegistryHelper;
+import net.legacyfabric.fabric.api.registry.v2.RegistryIds;
 
 @Mixin(StatusEffect.class)
 public class StatusEffectMixin {
-	@Inject(method = "<clinit>", at = @At("RETURN"))
-	private static void initRegistryRemapper(CallbackInfo ci) {
-		RegistryHelperImpl.registerRegistryRemapper(StatusEffectRegistryRemapper::new);
+	@Shadow
+	@Final
+	public static SimpleRegistry<Identifier, StatusEffect> REGISTRY;
+
+	@Inject(method = "register", at = @At("RETURN"))
+	private static void api$registerRegistry(CallbackInfo ci) {
+		RegistryHelper.addRegistry(RegistryIds.STATUS_EFFECTS, REGISTRY);
 	}
 }
