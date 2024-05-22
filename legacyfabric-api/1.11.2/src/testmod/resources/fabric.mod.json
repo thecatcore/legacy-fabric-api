@@ -40,6 +40,10 @@
       "net.legacyfabric.fabric.testing.TestMod"
     ]
   },
+  "mixins": [
+    "test-mod.mixins.json"
+  ],
+  "accessWidener": "legacy-fabric-api-test-mod.accesswidener",
   "custom": {
     "modmenu": {
       "badges": [ "library" ]

@@ -40,6 +40,9 @@
       "net.legacyfabric.fabric.testing.TestMod"
     ]
   },
+  "mixins": [
+    "test-mod.mixins.json"
+  ],
   "custom": {
     "modmenu": {
       "badges": [ "library" ]
