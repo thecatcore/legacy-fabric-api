@@ -44,5 +44,9 @@
     "modmenu": {
       "badges": [ "library" ]
     }
-  }
+  },
+  "mixins": [
+    "test-mod.mixins.json"
+  ],
+  "accessWidener": "legacy-fabric-api-test-mod.accesswidener"
 }
