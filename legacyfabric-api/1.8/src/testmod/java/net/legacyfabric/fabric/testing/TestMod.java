@@ -20,11 +20,15 @@ package net.legacyfabric.fabric.testing;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import net.legacyfabric.fabric.api.effect.PotionHelper;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -45,6 +49,7 @@ import net.legacyfabric.fabric.api.util.Identifier;
 
 public class TestMod implements ModInitializer {
 	static Identifier blockEntityTestId = new Identifier("legacy-fabric-api:test_block_entity");
+	public static StatusEffect EFFECT;
 	@Override
 	public void onInitialize() {
 		registerItem();
@@ -70,6 +75,41 @@ public class TestMod implements ModInitializer {
 		RegistryHelper.registerItem(new BlockItem(blockWithEntity), blockEntityTestId);
 
 		RegistryInitializedEvent.event(RegistryIds.BLOCK_ENTITY_TYPES).register(this::registerBlockEntity);
+
+		Identifier potionId = new Identifier("legacy-fabric-api", "test_effect");
+		EFFECT = net.legacyfabric.fabric.api.registry.v2.RegistryHelper.register(RegistryIds.STATUS_EFFECTS, potionId,
+				id -> new TestStatusEffect(id, new net.minecraft.util.Identifier(potionId.toString()), false, 1234567)
+						.method_2440(3, 1)
+						.method_2434(0.25)
+		);
+		PotionHelper.registerLevels(EFFECT, "!0 & !1 & !2 & !3 & 1+6");
+		PotionHelper.registerAmplifyingFactor(EFFECT, "5");
+	}
+
+	public static class TestStatusEffect extends StatusEffect {
+
+		public TestStatusEffect(int i, net.minecraft.util.Identifier identifier, boolean bl, int j) {
+			super(i, identifier, bl, j);
+		}
+
+		@Override
+		public void method_6087(LivingEntity livingEntity, int i) {
+			if (livingEntity.getHealth() < livingEntity.getMaxHealth()) {
+				livingEntity.heal(1.0F);
+			}
+		}
+
+		@Override
+		public boolean canApplyUpdateEffect(int duration, int amplifier) {
+			int i;
+
+			i = 50 >> amplifier;
+			if (i > 0) {
+				return duration % i == 0;
+			} else {
+				return true;
+			}
+		}
 	}
 
 	public void registerBlockEntity(Registry<?> registry) {
