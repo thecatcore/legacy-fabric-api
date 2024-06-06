@@ -20,6 +20,14 @@ package net.legacyfabric.fabric.testing;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffectStrings;
+import net.minecraft.item.Items;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.Potions;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
@@ -50,6 +58,7 @@ import net.legacyfabric.fabric.api.util.Identifier;
 
 public class TestMod implements ModInitializer {
 	static Identifier blockEntityTestId = new Identifier("legacy-fabric-api:test_block_entity");
+	public static StatusEffect EFFECT;
 	@Override
 	public void onInitialize() {
 		registerItem();
@@ -82,6 +91,39 @@ public class TestMod implements ModInitializer {
 		RegistryHelper.registerItem(new BlockItem(blockWithEntity), blockEntityTestId);
 
 		RegistryInitializedEvent.event(RegistryIds.BLOCK_ENTITY_TYPES).register(this::registerBlockEntity);
+
+		Identifier potionId = new Identifier("legacy-fabric-api", "test_effect");
+		EFFECT = new TestStatusEffect(false, 1234567).method_2440(3, 1).method_2434(0.25).method_12944();
+		net.legacyfabric.fabric.api.registry.v2.RegistryHelper.register(StatusEffect.REGISTRY, potionId, EFFECT);
+		Potion potion = new Potion(new StatusEffectInstance(EFFECT, 3600, 5));
+		net.legacyfabric.fabric.api.registry.v2.RegistryHelper.register(Potion.REGISTRY, potionId, potion);
+		StatusEffectStrings.method_11420(Potions.LEAPING, new StatusEffectStrings.class_2696(Items.GLISTERING_MELON), potion);
+	}
+
+	public static class TestStatusEffect extends StatusEffect {
+
+		public TestStatusEffect(boolean bl, int i) {
+			super(bl, i);
+		}
+
+		@Override
+		public void method_6087(LivingEntity livingEntity, int i) {
+			if (livingEntity.getHealth() < livingEntity.getMaxHealth()) {
+				livingEntity.heal(1.0F);
+			}
+		}
+
+		@Override
+		public boolean canApplyUpdateEffect(int duration, int amplifier) {
+			int i;
+
+			i = 50 >> amplifier;
+			if (i > 0) {
+				return duration % i == 0;
+			} else {
+				return true;
+			}
+		}
 	}
 
 	public void registerBlockEntity(Registry<?> registry) {
