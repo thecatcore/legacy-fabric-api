@@ -86,17 +86,6 @@ public class RegistryHelperImpl {
 		return entityTypeClass;
 	}
 
-	public static StatusEffect registerStatusEffect(StatusEffect statusEffect, Identifier id) {
-		statusEffect.setTranslationKey(formatTranslationKey(id));
-		register(statusEffect, id, RegistryIds.STATUS_EFFECTS);
-
-		return statusEffect;
-	}
-
-	public static StatusEffect registerStatusEffect(RegistryHelper.EntryCreator<StatusEffect> statusEffectCreator, Identifier id) {
-		return register(statusEffectCreator, id, RegistryIds.STATUS_EFFECTS, effect -> effect.setTranslationKey(formatTranslationKey(id)));
-	}
-
 	public static Enchantment registerEnchantment(Enchantment enchantment, Identifier id) {
 		enchantment.setName(formatTranslationKey(id));
 		register(enchantment, id, RegistryIds.ENCHANTMENTS);

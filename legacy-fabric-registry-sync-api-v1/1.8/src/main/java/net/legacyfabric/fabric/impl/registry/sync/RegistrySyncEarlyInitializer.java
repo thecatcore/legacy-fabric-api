@@ -41,14 +41,12 @@ import net.legacyfabric.fabric.impl.registry.RegistryHelperImpl;
 import net.legacyfabric.fabric.impl.registry.registries.OldBiomeRegistry;
 import net.legacyfabric.fabric.impl.registry.registries.OldEnchantmentRegistry;
 import net.legacyfabric.fabric.impl.registry.registries.OldEntityTypeRegistry;
-import net.legacyfabric.fabric.impl.registry.registries.OldStatusEffectRegistry;
 import net.legacyfabric.fabric.impl.registry.sync.compat.RegistriesGetter;
 import net.legacyfabric.fabric.impl.registry.sync.compat.SimpleRegistryCompat;
 import net.legacyfabric.fabric.impl.registry.util.OldRemappedRegistry;
 import net.legacyfabric.fabric.mixin.registry.sync.BiomeAccessor;
 import net.legacyfabric.fabric.mixin.registry.sync.EnchantmentAccessor;
 import net.legacyfabric.fabric.mixin.registry.sync.EntityTypeAccessor;
-import net.legacyfabric.fabric.mixin.registry.sync.StatusEffectAccessor;
 
 public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 	private static SimpleRegistryCompat<String, Class<? extends BlockEntity>> BLOCK_ENTITY_REGISTRY;
@@ -82,19 +80,19 @@ public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 
 			@Override
 			public <K> SimpleRegistryCompat<K, StatusEffect> getStatusEffectRegistry() {
-				if (STATUS_EFFECT_REGISTRY == null) {
-					BiMap<Identifier, StatusEffect> biMap = HashBiMap.create(StatusEffectAccessor.getSTATUS_EFFECTS_BY_ID());
-					StatusEffectAccessor.setSTATUS_EFFECTS_BY_ID(biMap);
+//				if (STATUS_EFFECT_REGISTRY == null) {
+//					BiMap<Identifier, StatusEffect> biMap = HashBiMap.create(StatusEffectAccessor.getSTATUS_EFFECTS_BY_ID());
+//					StatusEffectAccessor.setSTATUS_EFFECTS_BY_ID(biMap);
+//
+//					STATUS_EFFECT_REGISTRY = new OldStatusEffectRegistry(StatusEffect.STATUS_EFFECTS, biMap) {
+//						@Override
+//						public void updateArray() {
+//							StatusEffectAccessor.setSTATUS_EFFECTS(this.getArray());
+//						}
+//					};
+//				}
 
-					STATUS_EFFECT_REGISTRY = new OldStatusEffectRegistry(StatusEffect.STATUS_EFFECTS, biMap) {
-						@Override
-						public void updateArray() {
-							StatusEffectAccessor.setSTATUS_EFFECTS(this.getArray());
-						}
-					};
-				}
-
-				return (SimpleRegistryCompat<K, StatusEffect>) STATUS_EFFECT_REGISTRY;
+				return null;
 			}
 
 			@Override
@@ -172,14 +170,6 @@ public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 			RegistryEntryRemapCallback.<Enchantment>event(RegistryIds.ENCHANTMENTS).register((oldId, newId, key, enchantment) -> {
 				if (enchantment.id != newId) {
 					((EnchantmentAccessor) enchantment).setId(newId);
-				}
-			});
-		});
-
-		RegistryHelper.onRegistryInitialized(RegistryIds.STATUS_EFFECTS).register(() -> {
-			RegistryEntryRemapCallback.<StatusEffect>event(RegistryIds.STATUS_EFFECTS).register((oldId, newId, key, statusEffect) -> {
-				if (statusEffect.id != newId) {
-					((StatusEffectAccessor) statusEffect).setId(newId);
 				}
 			});
 		});
