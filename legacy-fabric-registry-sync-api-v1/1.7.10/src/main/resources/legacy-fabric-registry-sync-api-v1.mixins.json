@@ -9,11 +9,7 @@
     "SimpleRegistryMixin",
     "PacketByteBufMixin",
     "EnchantmentAccessor",
-    "BiomeAccessor",
-    "EntityTypeAccessor",
-    "EntityTypeMixin",
-    "EntityMixin",
-    "SpawnEggItemMixin"
+    "BiomeAccessor"
   ],
   "client": [
   ]
