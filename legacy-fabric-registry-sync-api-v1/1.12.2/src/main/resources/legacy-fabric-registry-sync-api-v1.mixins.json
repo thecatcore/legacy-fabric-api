@@ -10,8 +10,7 @@
     "class_2929Mixin",
     "PacketByteBufMixin",
     "MutableRegistryMixin",
-    "BiomeAccessor",
-    "EntityTypeAccessor"
+    "BiomeAccessor"
   ],
   "client": [
   ]

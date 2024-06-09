@@ -38,6 +38,9 @@
   "entrypoints": {
     "main": [
       "net.legacyfabric.fabric.testing.TestMod"
+    ],
+    "client": [
+      "net.legacyfabric.fabric.testing.ClientTestMod"
     ]
   },
   "mixins": [

@@ -30,14 +30,12 @@ import net.minecraft.world.biome.Biome;
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;
 
 import net.legacyfabric.fabric.api.registry.v1.RegistryEntryAddCallback;
-import net.legacyfabric.fabric.api.registry.v1.RegistryEntryRemapCallback;
 import net.legacyfabric.fabric.api.registry.v1.RegistryHelper;
 import net.legacyfabric.fabric.api.registry.v1.RegistryIds;
 import net.legacyfabric.fabric.impl.registry.RegistryHelperImpl;
 import net.legacyfabric.fabric.impl.registry.sync.compat.RegistriesGetter;
 import net.legacyfabric.fabric.impl.registry.sync.compat.SimpleRegistryCompat;
 import net.legacyfabric.fabric.mixin.registry.sync.BiomeAccessor;
-import net.legacyfabric.fabric.mixin.registry.sync.EntityTypeAccessor;
 
 public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 	@Override
@@ -85,33 +83,6 @@ public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 				if (biome.isMutatedBiome()) {
 					Biome.biomeList.set(biome, Biome.getBiomeIndex(Biome.REGISTRY.get(new Identifier(((BiomeAccessor) biome).getParent()))));
 				}
-			});
-		});
-
-		RegistryHelper.onRegistryInitialized(RegistryIds.ENTITY_TYPES).register(() -> {
-			RegistryEntryAddCallback.<Class<? extends Entity>>event(RegistryIds.ENTITY_TYPES).register((rawId, key, object) -> {
-				EntityType.IDENTIFIERS.add(new Identifier(key.toString()));
-
-				while (EntityTypeAccessor.getNAMES().size() <= rawId) {
-					EntityTypeAccessor.getNAMES().add(null);
-				}
-
-				EntityTypeAccessor.getNAMES().set(rawId, key.getNamespace() + "." + key.getPath());
-			});
-
-			RegistryEntryRemapCallback.<Class<? extends Entity>>event(RegistryIds.ENTITY_TYPES).register((oldId, newId, key, object) -> {
-				while (EntityTypeAccessor.getNAMES().size() <= oldId || EntityTypeAccessor.getNAMES().size() <= newId) {
-					EntityTypeAccessor.getNAMES().add(null);
-				}
-
-				String name = EntityTypeAccessor.getNAMES().get(oldId);
-
-				if (name.isEmpty()) {
-					name = key.getNamespace() + "." + key.getPath();
-				}
-
-				EntityTypeAccessor.getNAMES().set(oldId, null);
-				EntityTypeAccessor.getNAMES().set(newId, name);
 			});
 		});
 	}
