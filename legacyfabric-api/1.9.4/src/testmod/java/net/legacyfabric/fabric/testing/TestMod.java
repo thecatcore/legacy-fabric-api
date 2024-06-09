@@ -20,10 +20,13 @@ package net.legacyfabric.fabric.testing;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import net.legacyfabric.fabric.api.entity.EntityHelper;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectStrings;
+import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.Potions;
@@ -98,6 +101,28 @@ public class TestMod implements ModInitializer {
 		Potion potion = new Potion(new StatusEffectInstance(EFFECT, 3600, 5));
 		net.legacyfabric.fabric.api.registry.v2.RegistryHelper.register(Potion.REGISTRY, potionId, potion);
 		StatusEffectStrings.method_11420(Potions.LEAPING, new StatusEffectStrings.class_2696(Items.GLISTERING_MELON), potion);
+
+		Identifier creeperId = new Identifier("legacy-fabric-api", "test_creeper");
+		net.legacyfabric.fabric.api.registry.v2.RegistryHelper.register(RegistryIds.ENTITY_TYPES, creeperId, TestCreeperEntity.class);
+		EntityHelper.registerSpawnEgg(creeperId, 12222, 563933);
+	}
+
+	public static class TestCreeperEntity extends CreeperEntity {
+
+		public TestCreeperEntity(World world) {
+			super(world);
+		}
+
+		@Override
+		public void tick() {
+			if (this.isAlive()) {
+				if (this.hasStatusEffect(EFFECT)) {
+					this.ignite();
+				}
+			}
+
+			super.tick();
+		}
 	}
 
 	public static class TestStatusEffect extends StatusEffect {
