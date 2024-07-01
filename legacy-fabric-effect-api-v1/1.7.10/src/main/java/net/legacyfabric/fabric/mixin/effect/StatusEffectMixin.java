@@ -73,7 +73,8 @@ public class StatusEffectMixin {
 					}
 
 					STATUS_EFFECTS = array;
-				}
+				},
+				1
 		);
 
 		RegistryHelper.addRegistry(RegistryIds.STATUS_EFFECTS, STATUS_EFFECT_REGISTRY);

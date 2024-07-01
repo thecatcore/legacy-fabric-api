@@ -9,7 +9,6 @@
     "SimpleRegistryMixin",
     "PacketByteBufMixin",
     "MutableRegistryMixin",
-    "EnchantmentAccessor",
     "BiomeAccessor"
   ],
   "client": [

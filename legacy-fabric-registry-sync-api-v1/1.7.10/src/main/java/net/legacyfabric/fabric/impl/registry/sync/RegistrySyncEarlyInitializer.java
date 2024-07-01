@@ -41,7 +41,6 @@ import net.legacyfabric.fabric.impl.registry.sync.compat.RegistriesGetter;
 import net.legacyfabric.fabric.impl.registry.sync.compat.SimpleRegistryCompat;
 import net.legacyfabric.fabric.impl.registry.util.OldRemappedRegistry;
 import net.legacyfabric.fabric.mixin.registry.sync.BiomeAccessor;
-import net.legacyfabric.fabric.mixin.registry.sync.EnchantmentAccessor;
 
 public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 	private static SimpleRegistryCompat<String, Class<? extends BlockEntity>> BLOCK_ENTITY_REGISTRY;
@@ -90,26 +89,26 @@ public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 
 			@Override
 			public <K> SimpleRegistryCompat<K, Enchantment> getEnchantmentRegistry() {
-				if (ENCHANTMENT_REGISTRY == null) {
-					ENCHANTMENT_REGISTRY = new ReallyOldEnchantmentRegistry(Enchantment.ALL_ENCHANTMENTS) {
-						@Override
-						public void updateArray() {
-							EnchantmentAccessor.setALL_ENCHANTMENTS(this.getArray());
+//				if (ENCHANTMENT_REGISTRY == null) {
+//					ENCHANTMENT_REGISTRY = new ReallyOldEnchantmentRegistry(Enchantment.ALL_ENCHANTMENTS) {
+//						@Override
+//						public void updateArray() {
+//							EnchantmentAccessor.setALL_ENCHANTMENTS(this.getArray());
+//
+//							List<Enchantment> enchantments = new ArrayList<>();
+//
+//							for (Enchantment enchantment : Enchantment.ALL_ENCHANTMENTS) {
+//								if (enchantment != null) {
+//									enchantments.add(enchantment);
+//								}
+//							}
+//
+//							EnchantmentAccessor.setField_5457(enchantments.toArray(new Enchantment[0]));
+//						}
+//					};
+//				}
 
-							List<Enchantment> enchantments = new ArrayList<>();
-
-							for (Enchantment enchantment : Enchantment.ALL_ENCHANTMENTS) {
-								if (enchantment != null) {
-									enchantments.add(enchantment);
-								}
-							}
-
-							EnchantmentAccessor.setField_5457(enchantments.toArray(new Enchantment[0]));
-						}
-					};
-				}
-
-				return (SimpleRegistryCompat<K, Enchantment>) ENCHANTMENT_REGISTRY;
+				return null;
 			}
 
 			@Override
@@ -151,14 +150,6 @@ public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 			RegistryEntryRemapCallback.<Biome>event(RegistryIds.BIOMES).register((oldId, newId, key, biome) -> {
 				if (biome.id != newId) {
 					((BiomeAccessor) biome).setId(newId);
-				}
-			});
-		});
-
-		RegistryHelper.onRegistryInitialized(RegistryIds.ENCHANTMENTS).register(() -> {
-			RegistryEntryRemapCallback.<Enchantment>event(RegistryIds.ENCHANTMENTS).register((oldId, newId, key, enchantment) -> {
-				if (enchantment.id != newId) {
-					((EnchantmentAccessor) enchantment).setId(newId);
 				}
 			});
 		});
