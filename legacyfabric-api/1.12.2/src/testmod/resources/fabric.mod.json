@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "legacy-fabric-api-testmod",
+  "id": "legacy-fabric-api-testmod-impl",
   "name": "Legacy Fabric API",
   "version": "${version}",
   "environment": "*",
