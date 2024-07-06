@@ -30,8 +30,12 @@ import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentTarget;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
@@ -92,6 +96,31 @@ public class TestMod implements ModInitializer {
 		Identifier creeperId = new Identifier("legacy-fabric-api", "test_creeper");
 		net.legacyfabric.fabric.api.registry.v2.RegistryHelper.register(RegistryIds.ENTITY_TYPES, creeperId, TestCreeperEntity.class);
 		EntityHelper.registerSpawnEgg(creeperId, 12222, 563933);
+
+		RegistryInitializedEvent.event(RegistryIds.ENCHANTMENTS).register(this::registerEnchantment);
+	}
+
+	public void registerEnchantment(Registry<?> registry) {
+		System.err.println("Registering enchantment");
+		Identifier enchantmentId = new Identifier("legacy-fabric-api", "test_enchantment");
+		net.legacyfabric.fabric.api.registry.v2.RegistryHelper.register(RegistryIds.ENCHANTMENTS, enchantmentId,
+				(id) -> new TestEnchantment(id, enchantmentId));
+	}
+
+	public static class TestEnchantment extends Enchantment {
+		protected TestEnchantment(int id, Identifier identifier) {
+			super(id, new net.minecraft.util.Identifier(identifier.toString()), 2, EnchantmentTarget.FEET);
+		}
+
+		@Override
+		public void onDamage(LivingEntity livingEntity, Entity entity, int power) {
+			livingEntity.addStatusEffect(new StatusEffectInstance(EFFECT.id, 50, 10));
+		}
+
+		@Override
+		public void onDamaged(LivingEntity livingEntity, Entity entity, int power) {
+			livingEntity.addStatusEffect(new StatusEffectInstance(EFFECT.id, 50, 10));
+		}
 	}
 
 	public static class TestCreeperEntity extends CreeperEntity {

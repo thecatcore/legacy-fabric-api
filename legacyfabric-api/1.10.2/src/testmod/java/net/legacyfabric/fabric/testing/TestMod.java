@@ -24,7 +24,11 @@ import net.legacyfabric.fabric.api.entity.EntityHelper;
 
 import net.legacyfabric.fabric.api.registry.v2.RegistryIds;
 
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentTarget;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 
@@ -105,6 +109,25 @@ public class TestMod implements ModInitializer {
 		Identifier creeperId = new Identifier("legacy-fabric-api", "test_creeper");
 		net.legacyfabric.fabric.api.registry.v2.RegistryHelper.register(RegistryIds.ENTITY_TYPES, creeperId, TestCreeperEntity.class);
 		EntityHelper.registerSpawnEgg(creeperId, 12222, 563933);
+
+		Identifier enchantmentId = new Identifier("legacy-fabric-api", "test_enchantment");
+		net.legacyfabric.fabric.api.registry.v2.RegistryHelper.register(Enchantment.REGISTRY, enchantmentId, new TestEnchantment());
+	}
+
+	public static class TestEnchantment extends Enchantment {
+		protected TestEnchantment() {
+			super(Rarity.COMMON, EnchantmentTarget.FEET, new EquipmentSlot[]{EquipmentSlot.FEET});
+		}
+
+		@Override
+		public void onDamage(LivingEntity livingEntity, Entity entity, int power) {
+			livingEntity.addStatusEffect(new StatusEffectInstance(EFFECT, 50, 10));
+		}
+
+		@Override
+		public void onDamaged(LivingEntity livingEntity, Entity entity, int power) {
+			livingEntity.addStatusEffect(new StatusEffectInstance(EFFECT, 50, 10));
+		}
 	}
 
 	public static class TestCreeperEntity extends CreeperEntity {
