@@ -3,7 +3,7 @@ plugins {
 	id "eclipse"
 	id "idea"
 	id "maven-publish"
-	id "fabric-loom" version "1.6.5" apply false
+	id "fabric-loom" version "1.6.2" apply false
 	id "legacy-looming" version "1.6.3" apply false
 	id "com.diffplug.spotless" version "6.20.0"
 	id "org.ajoberstar.grgit" version "3.1.1"
@@ -22,7 +22,8 @@ def supportedVersions = [
 	"1.9.4",
 	"1.8.9",
 	"1.8",
-	"1.7.10"
+	"1.7.10",
+	"1.6.4"
 ]
 def supportedRanges = [
 //    ["1.8", "1.8.9", false] // third parameter is whether or not to include snapshots in the range.
@@ -354,6 +355,15 @@ allprojects {
 			importOrder("java", "javax", "", "net.minecraft", "net.fabricmc", "net.legacyfabric")
 			indentWithTabs()
 			trimTrailingWhitespace()
+			targetExclude('**/lib/sponge/*.java', '**/lib/sponge/**/*.java')
+		}
+		format("sponge", com.diffplug.gradle.spotless.JavaExtension) {
+			licenseHeaderFile(rootProject.file("SPONGE_HEADER"))
+			removeUnusedImports()
+			importOrder("java", "javax", "", "net.minecraft", "net.fabricmc", "net.legacyfabric")
+			indentWithTabs()
+			trimTrailingWhitespace()
+			target('**/lib/sponge/*.java', '**/lib/sponge/**/*.java')
 		}
 	}
 
