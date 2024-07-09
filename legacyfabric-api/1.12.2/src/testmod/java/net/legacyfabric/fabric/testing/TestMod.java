@@ -20,8 +20,6 @@ package net.legacyfabric.fabric.testing;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import net.legacyfabric.fabric.api.entity.EntityHelper;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -37,7 +35,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectStrings;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
@@ -54,9 +51,13 @@ import net.minecraft.world.World;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.legacyfabric.fabric.api.entity.EntityHelper;
 import net.legacyfabric.fabric.api.registry.v2.RegistryHelper;
 import net.legacyfabric.fabric.api.resource.ItemModelRegistry;
 import net.legacyfabric.fabric.api.util.Identifier;
+
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.PlainsBiome;
 
 public class TestMod implements ModInitializer {
 	static Identifier blockEntityTestId = new Identifier("legacy-fabric-api:test_block_entity");
@@ -109,6 +110,16 @@ public class TestMod implements ModInitializer {
 
 		Identifier enchantmentId = new Identifier("legacy-fabric-api", "test_enchantment");
 		RegistryHelper.register(Enchantment.REGISTRY, enchantmentId, new TestEnchantment());
+
+		Identifier biomeId = new Identifier("legacy-fabric-api", "test_biome");
+		RegistryHelper.register(Biome.REGISTRY, biomeId, new TestBiome(false,
+				new Biome.Settings("Test Biome").setBaseHeightModifier(0.525F).setVariationModifier(0.95F).setTemperature(0.3F).setDownfall(0.7F)));
+	}
+
+	public static class TestBiome extends PlainsBiome {
+		protected TestBiome(boolean bl, Settings settings) {
+			super(bl, settings);
+		}
 	}
 
 	public static class TestEnchantment extends Enchantment {
