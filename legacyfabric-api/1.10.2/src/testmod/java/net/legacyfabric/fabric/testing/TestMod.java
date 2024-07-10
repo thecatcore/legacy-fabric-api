@@ -20,24 +20,8 @@ package net.legacyfabric.fabric.testing;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import net.legacyfabric.fabric.api.entity.EntityHelper;
-
-import net.legacyfabric.fabric.api.registry.v2.RegistryIds;
-
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffect;
-
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffectStrings;
-import net.minecraft.entity.mob.CreeperEntity;
-import net.minecraft.item.Items;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.Potions;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.PlainsBiome;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -47,11 +31,23 @@ import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentTarget;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffectStrings;
+import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.itemgroup.ItemGroup;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.Potions;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -60,7 +56,9 @@ import net.minecraft.world.World;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.legacyfabric.fabric.api.entity.EntityHelper;
 import net.legacyfabric.fabric.api.registry.v1.RegistryHelper;
+import net.legacyfabric.fabric.api.registry.v2.RegistryIds;
 import net.legacyfabric.fabric.api.resource.ItemModelRegistry;
 import net.legacyfabric.fabric.api.util.Identifier;
 
@@ -112,6 +110,16 @@ public class TestMod implements ModInitializer {
 
 		Identifier enchantmentId = new Identifier("legacy-fabric-api", "test_enchantment");
 		net.legacyfabric.fabric.api.registry.v2.RegistryHelper.register(Enchantment.REGISTRY, enchantmentId, new TestEnchantment());
+
+		Identifier biomeId = new Identifier("legacy-fabric-api", "test_biome");
+		net.legacyfabric.fabric.api.registry.v2.RegistryHelper.register(Biome.REGISTRY, biomeId, new TestBiome(false,
+				new Biome.Settings("Test Biome").setBaseHeightModifier(0.525F).setVariationModifier(0.95F).setTemperature(0.3F).setDownfall(0.7F)));
+	}
+
+	public static class TestBiome extends PlainsBiome {
+		protected TestBiome(boolean bl, Settings settings) {
+			super(bl, settings);
+		}
 	}
 
 	public static class TestEnchantment extends Enchantment {

@@ -35,7 +35,6 @@ import net.legacyfabric.fabric.impl.registry.RegistryHelperImpl;
 import net.legacyfabric.fabric.impl.registry.sync.compat.RegistriesGetter;
 import net.legacyfabric.fabric.impl.registry.sync.compat.SimpleRegistryCompat;
 import net.legacyfabric.fabric.impl.registry.util.OldRemappedRegistry;
-import net.legacyfabric.fabric.mixin.registry.sync.BiomeAccessor;
 
 public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 	private static SimpleRegistryCompat<String, Class<? extends BlockEntity>> BLOCK_ENTITY_REGISTRY;
@@ -101,12 +100,12 @@ public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 			}
 		};
 
-		RegistryHelper.onRegistryInitialized(RegistryIds.BIOMES).register(() -> {
-			RegistryEntryAddCallback.<Biome>event(RegistryIds.BIOMES).register((rawId, id, biome) -> {
-				if (biome.isMutatedBiome()) {
-					Biome.biomeList.set(biome, Biome.getBiomeIndex(Biome.REGISTRY.get(new Identifier(((BiomeAccessor) biome).getParent()))));
-				}
-			});
-		});
+//		RegistryHelper.onRegistryInitialized(RegistryIds.BIOMES).register(() -> {
+//			RegistryEntryAddCallback.<Biome>event(RegistryIds.BIOMES).register((rawId, id, biome) -> {
+//				if (biome.isMutatedBiome()) {
+//					Biome.biomeList.set(biome, Biome.getBiomeIndex(Biome.REGISTRY.get(new Identifier(((BiomeAccessor) biome).getParent()))));
+//				}
+//			});
+//		});
 	}
 }

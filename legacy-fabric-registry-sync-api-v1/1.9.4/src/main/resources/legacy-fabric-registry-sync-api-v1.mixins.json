@@ -9,8 +9,7 @@
     "SimpleRegistryMixin",
     "class_2929Mixin",
     "PacketByteBufMixin",
-    "MutableRegistryMixin",
-    "BiomeAccessor"
+    "MutableRegistryMixin"
   ],
   "client": [
   ]
