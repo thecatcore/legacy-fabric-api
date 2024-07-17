@@ -18,7 +18,10 @@
 package net.legacyfabric.fabric.api.registry.v1;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import net.legacyfabric.fabric.api.registry.v2.registry.holder.RegistryEntry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
@@ -251,7 +254,13 @@ public final class RegistryHelper {
 			EntryCreator<Biome> parentBiome, Identifier parentId,
 			EntryCreator<Biome> mutatedBiome, Identifier mutatedId
 	) {
-		return RegistryHelperImpl.registerBiomeWithMutatedVariant(parentBiome, parentId, mutatedBiome, mutatedId);
+		List<RegistryEntry<Biome>> list = net.legacyfabric.fabric.api.registry.v2.RegistryHelper.registerMultiple(
+				RegistryIds.BIOMES,
+				net.legacyfabric.fabric.api.registry.v2.RegistryHelper.createEntryCreator(parentId, parentBiome::create),
+				net.legacyfabric.fabric.api.registry.v2.RegistryHelper.createEntryCreator(mutatedId, mutatedBiome::create, 128)
+		);
+
+		return new BiomePair(list.get(0).getValue(), list.get(1).getValue());
 	}
 
 	public static Biome getBiome(Identifier id) {

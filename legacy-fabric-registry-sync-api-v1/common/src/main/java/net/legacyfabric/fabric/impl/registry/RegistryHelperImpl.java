@@ -80,51 +80,6 @@ public class RegistryHelperImpl {
 		return instance;
 	}
 
-	public static Class<? extends Entity> registerEntityType(Class<? extends Entity> entityTypeClass, Identifier id) {
-		register(entityTypeClass, id, RegistryIds.ENTITY_TYPES);
-
-		return entityTypeClass;
-	}
-
-	public static Enchantment registerEnchantment(Enchantment enchantment, Identifier id) {
-		enchantment.setName(formatTranslationKey(id));
-		register(enchantment, id, RegistryIds.ENCHANTMENTS);
-
-		return enchantment;
-	}
-
-	public static Enchantment registerEnchantment(RegistryHelper.EntryCreator<Enchantment> enchantmentCreator, Identifier id) {
-		return register(enchantmentCreator, id, RegistryIds.ENCHANTMENTS, enchantment -> enchantment.setName(formatTranslationKey(id)));
-	}
-
-	public static Biome registerBiome(Biome biome, Identifier id) {
-		register(biome, id, RegistryIds.BIOMES);
-
-		return biome;
-	}
-
-	public static Biome registerBiome(RegistryHelper.EntryCreator<Biome> biomeCreator, Identifier id) {
-		return register(biomeCreator, id, RegistryIds.BIOMES);
-	}
-
-	public static BiomePair registerBiomeWithMutatedVariant(
-			RegistryHelper.EntryCreator<Biome> parentBiomeCreator, Identifier parentId,
-			RegistryHelper.EntryCreator<Biome> mutatedBiomeCreator, Identifier mutatedId
-	) {
-		RegistryRemapper<Biome> registryRemapper = RegistryRemapper.getRegistryRemapper(RegistryIds.BIOMES);
-		NumericalIdPair rawIds = nextIds(registryRemapper.getRegistry(), 128);
-
-		((ArrayAndMapBasedRegistry<?, ?>) registryRemapper.getRegistry()).updateArrayLength(rawIds.getSecondary());
-
-		Biome parentBiome = parentBiomeCreator.create(rawIds.getMain());
-		registryRemapper.register(rawIds.getMain(), parentId, parentBiome);
-
-		Biome mutatedBiome = mutatedBiomeCreator.create(rawIds.getSecondary());
-		registryRemapper.register(rawIds.getSecondary(), mutatedId, mutatedBiome);
-
-		return new BiomePair(parentBiome, mutatedBiome);
-	}
-
 	public static <V> V getValue(Identifier id, Identifier registryId) {
 		RegistryRemapper<V> registryRemapper = RegistryRemapper.getRegistryRemapper(registryId);
 		return registryRemapper.getRegistry().getValue(id);
