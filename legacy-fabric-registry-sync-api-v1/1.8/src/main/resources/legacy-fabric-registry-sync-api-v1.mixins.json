@@ -8,8 +8,7 @@
   "mixins": [
     "SimpleRegistryMixin",
     "PacketByteBufMixin",
-    "MutableRegistryMixin",
-    "BiomeAccessor"
+    "MutableRegistryMixin"
   ],
   "client": [
   ]

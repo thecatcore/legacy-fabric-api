@@ -20,9 +20,12 @@ package net.legacyfabric.fabric.testing;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import net.legacyfabric.fabric.api.biome.BiomeHelper;
 import net.legacyfabric.fabric.api.effect.PotionHelper;
 
 import net.legacyfabric.fabric.api.entity.EntityHelper;
+
+import net.legacyfabric.fabric.api.registry.v2.registry.SyncedRegistrableRegistry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -53,6 +56,11 @@ import net.legacyfabric.fabric.api.registry.v2.event.RegistryInitializedEvent;
 import net.legacyfabric.fabric.api.registry.v2.registry.holder.Registry;
 import net.legacyfabric.fabric.api.resource.ItemModelRegistry;
 import net.legacyfabric.fabric.api.util.Identifier;
+
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.MutatedBiome;
+import net.minecraft.world.biome.PlainsBiome;
+import net.minecraft.world.biome.class_1742;
 
 public class TestMod implements ModInitializer {
 	static Identifier blockEntityTestId = new Identifier("legacy-fabric-api:test_block_entity");
@@ -97,6 +105,47 @@ public class TestMod implements ModInitializer {
 		EntityHelper.registerSpawnEgg(creeperId, 12222, 563933);
 
 		RegistryInitializedEvent.event(RegistryIds.ENCHANTMENTS).register(this::registerEnchantment);
+		RegistryInitializedEvent.event(RegistryIds.BIOMES).register(this::registerBiomes);
+	}
+
+	public void registerBiomes(Registry<?> r) {
+		SyncedRegistrableRegistry<Biome> registry = (SyncedRegistrableRegistry<Biome>) r;
+
+		System.err.println("Registering biomes");
+		Identifier biomeId = new Identifier("legacy-fabric-api", "test_biome");
+		Identifier biomeChildId = new Identifier("legacy-fabric-api", "test_biome_child");
+
+		BiomeHelper.registerBiomeWithParent(
+				biomeId, id -> new TestBiome(id)
+						.setSeedModifier(4446496)
+						.setTempratureAndDownfall(0.3F, 0.7F),
+				biomeChildId, (id, biome) -> biome.getMutatedVariant(id).setTempratureAndDownfall(3.5F, 0.1F)
+		);
+
+		for (Biome o : registry) {
+			if (o == null) continue;
+			System.err.println(registry.fabric$getId(o) + " -> " + registry.fabric$getRawId(o) + " -> " + o);
+		}
+	}
+
+	public static class TestBiome extends PlainsBiome {
+		protected TestBiome(int id) {
+			super(id);
+			this.method_6422(new class_1742(0.525F, 0.95F));
+		}
+
+		@Override
+		public Biome getMutatedVariant(int id) {
+			return new CustomMutatedBiome(id, this);
+		}
+	}
+
+	public static class CustomMutatedBiome extends MutatedBiome {
+
+		public CustomMutatedBiome(int i, Biome biome) {
+			super(i, biome);
+			this.method_6422(new class_1742(0.1F, 3.95F));
+		}
 	}
 
 	public void registerEnchantment(Registry<?> registry) {

@@ -40,7 +40,6 @@ import net.legacyfabric.fabric.impl.registry.registries.ReallyOldEnchantmentRegi
 import net.legacyfabric.fabric.impl.registry.sync.compat.RegistriesGetter;
 import net.legacyfabric.fabric.impl.registry.sync.compat.SimpleRegistryCompat;
 import net.legacyfabric.fabric.impl.registry.util.OldRemappedRegistry;
-import net.legacyfabric.fabric.mixin.registry.sync.BiomeAccessor;
 
 public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 	private static SimpleRegistryCompat<String, Class<? extends BlockEntity>> BLOCK_ENTITY_REGISTRY;
@@ -113,16 +112,16 @@ public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 
 			@Override
 			public <K> SimpleRegistryCompat<K, Biome> getBiomeRegistry() {
-				if (BIOME_REGISTRY == null) {
-					BIOME_REGISTRY = new ReallyOldBiomeRegistry(BiomeAccessor.getBIOMES()) {
-						@Override
-						public void updateArray() {
-							BiomeAccessor.setBIOMES(this.getArray());
-						}
-					};
-				}
+//				if (BIOME_REGISTRY == null) {
+//					BIOME_REGISTRY = new ReallyOldBiomeRegistry(BiomeAccessor.getBIOMES()) {
+//						@Override
+//						public void updateArray() {
+//							BiomeAccessor.setBIOMES(this.getArray());
+//						}
+//					};
+//				}
 
-				return (SimpleRegistryCompat<K, Biome>) BIOME_REGISTRY;
+				return (SimpleRegistryCompat<K, Biome>) null;
 			}
 
 			@Override
@@ -145,13 +144,5 @@ public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 				return null;
 			}
 		};
-
-		RegistryHelper.onRegistryInitialized(RegistryIds.BIOMES).register(() -> {
-			RegistryEntryRemapCallback.<Biome>event(RegistryIds.BIOMES).register((oldId, newId, key, biome) -> {
-				if (biome.id != newId) {
-					((BiomeAccessor) biome).setId(newId);
-				}
-			});
-		});
 	}
 }

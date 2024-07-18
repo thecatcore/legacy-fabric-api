@@ -43,7 +43,6 @@ import net.legacyfabric.fabric.impl.registry.registries.OldEnchantmentRegistry;
 import net.legacyfabric.fabric.impl.registry.sync.compat.RegistriesGetter;
 import net.legacyfabric.fabric.impl.registry.sync.compat.SimpleRegistryCompat;
 import net.legacyfabric.fabric.impl.registry.util.OldRemappedRegistry;
-import net.legacyfabric.fabric.mixin.registry.sync.BiomeAccessor;
 
 public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 	private static SimpleRegistryCompat<String, Class<? extends BlockEntity>> BLOCK_ENTITY_REGISTRY;
@@ -120,16 +119,16 @@ public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 
 			@Override
 			public <K> SimpleRegistryCompat<K, Biome> getBiomeRegistry() {
-				if (BIOME_REGISTRY == null) {
-					BiMap<String, Biome> map = HashBiMap.create(Biome.MUTATED_BIOMES);
-					BiomeAccessor.setMUTATED_BIOMES(map);
-					BIOME_REGISTRY = new OldBiomeRegistry(BiomeAccessor.getBIOMES(), map) {
-						@Override
-						public void updateArray() {
-							BiomeAccessor.setBIOMES(this.getArray());
-						}
-					};
-				}
+//				if (BIOME_REGISTRY == null) {
+//					BiMap<String, Biome> map = HashBiMap.create(Biome.MUTATED_BIOMES);
+//					BiomeAccessor.setMUTATED_BIOMES(map);
+//					BIOME_REGISTRY = new OldBiomeRegistry(BiomeAccessor.getBIOMES(), map) {
+//						@Override
+//						public void updateArray() {
+//							BiomeAccessor.setBIOMES(this.getArray());
+//						}
+//					};
+//				}
 
 				return (SimpleRegistryCompat<K, Biome>) BIOME_REGISTRY;
 			}
@@ -154,13 +153,5 @@ public class RegistrySyncEarlyInitializer implements PreLaunchEntrypoint {
 				return null;
 			}
 		};
-
-		RegistryHelper.onRegistryInitialized(RegistryIds.BIOMES).register(() -> {
-			RegistryEntryRemapCallback.<Biome>event(RegistryIds.BIOMES).register((oldId, newId, key, biome) -> {
-				if (biome.id != newId) {
-					((BiomeAccessor) biome).setId(newId);
-				}
-			});
-		});
 	}
 }
