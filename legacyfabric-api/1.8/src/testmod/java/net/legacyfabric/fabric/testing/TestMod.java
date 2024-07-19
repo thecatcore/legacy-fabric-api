@@ -104,14 +104,14 @@ public class TestMod implements ModInitializer {
 		net.legacyfabric.fabric.api.registry.v2.RegistryHelper.register(RegistryIds.ENTITY_TYPES, creeperId, TestCreeperEntity.class);
 		EntityHelper.registerSpawnEgg(creeperId, 12222, 563933);
 
-		RegistryInitializedEvent.event(RegistryIds.ENCHANTMENTS).register(this::registerEnchantment);
-		RegistryInitializedEvent.event(RegistryIds.BIOMES).register(this::registerBiomes);
+		Identifier enchantmentId = new Identifier("legacy-fabric-api", "test_enchantment");
+		net.legacyfabric.fabric.api.registry.v2.RegistryHelper.register(RegistryIds.ENCHANTMENTS, enchantmentId,
+				(id) -> new TestEnchantment(id, enchantmentId));
+
+		registerBiomes((SyncedRegistrableRegistry<Biome>)(Object) net.legacyfabric.fabric.api.registry.v2.RegistryHelper.getRegistry(net.legacyfabric.fabric.api.registry.v1.RegistryIds.BIOMES));
 	}
 
-	public void registerBiomes(Registry<?> r) {
-		SyncedRegistrableRegistry<Biome> registry = (SyncedRegistrableRegistry<Biome>) r;
-
-		System.err.println("Registering biomes");
+	public void registerBiomes(SyncedRegistrableRegistry<Biome> registry) {
 		Identifier biomeId = new Identifier("legacy-fabric-api", "test_biome");
 		Identifier biomeChildId = new Identifier("legacy-fabric-api", "test_biome_child");
 
@@ -146,13 +146,6 @@ public class TestMod implements ModInitializer {
 			super(i, biome);
 			this.method_6422(new class_1742(0.1F, 3.95F));
 		}
-	}
-
-	public void registerEnchantment(Registry<?> registry) {
-		System.err.println("Registering enchantment");
-		Identifier enchantmentId = new Identifier("legacy-fabric-api", "test_enchantment");
-		net.legacyfabric.fabric.api.registry.v2.RegistryHelper.register(RegistryIds.ENCHANTMENTS, enchantmentId,
-				(id) -> new TestEnchantment(id, enchantmentId));
 	}
 
 	public static class TestEnchantment extends Enchantment {
