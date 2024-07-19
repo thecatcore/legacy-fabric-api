@@ -41,6 +41,9 @@
     ],
     "client": [
       "net.legacyfabric.fabric.testing.ClientTestMod"
+    ],
+    "preLaunch": [
+      "net.legacyfabric.fabric.testing.TestModPreLaunch"
     ]
   },
   "mixins": [
