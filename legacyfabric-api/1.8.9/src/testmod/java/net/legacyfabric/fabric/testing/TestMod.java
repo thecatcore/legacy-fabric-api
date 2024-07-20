@@ -20,13 +20,6 @@ package net.legacyfabric.fabric.testing;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import net.legacyfabric.fabric.api.biome.BiomeHelper;
-import net.legacyfabric.fabric.api.effect.PotionHelper;
-
-import net.legacyfabric.fabric.api.entity.EntityHelper;
-
-import net.legacyfabric.fabric.api.registry.v2.registry.SyncedRegistrableRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -48,19 +41,22 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-
-import net.fabricmc.api.ModInitializer;
-
-import net.legacyfabric.fabric.api.registry.v1.RegistryHelper;
-import net.legacyfabric.fabric.api.registry.v2.RegistryIds;
-import net.legacyfabric.fabric.api.registry.v2.event.RegistryInitializedEvent;
-import net.legacyfabric.fabric.api.registry.v2.registry.holder.Registry;
-import net.legacyfabric.fabric.api.resource.ItemModelRegistry;
-import net.legacyfabric.fabric.api.util.Identifier;
-
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MutatedBiome;
 import net.minecraft.world.biome.PlainsBiome;
+
+import net.fabricmc.api.ModInitializer;
+
+import net.legacyfabric.fabric.api.biome.BiomeHelper;
+import net.legacyfabric.fabric.api.effect.PotionHelper;
+import net.legacyfabric.fabric.api.entity.EntityHelper;
+import net.legacyfabric.fabric.api.registry.v1.RegistryHelper;
+import net.legacyfabric.fabric.api.registry.v2.RegistryIds;
+import net.legacyfabric.fabric.api.registry.v2.event.RegistryInitializedEvent;
+import net.legacyfabric.fabric.api.registry.v2.registry.SyncedRegistrableRegistry;
+import net.legacyfabric.fabric.api.registry.v2.registry.holder.Registry;
+import net.legacyfabric.fabric.api.resource.ItemModelRegistry;
+import net.legacyfabric.fabric.api.util.Identifier;
 
 public class TestMod implements ModInitializer {
 	static Identifier blockEntityTestId = new Identifier("legacy-fabric-api:test_block_entity");

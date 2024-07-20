@@ -25,16 +25,10 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import org.jetbrains.annotations.ApiStatus;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.world.biome.Biome;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 
 import net.legacyfabric.fabric.api.registry.v1.RegistryHelper;
-import net.legacyfabric.fabric.api.registry.v1.RegistryIds;
 import net.legacyfabric.fabric.api.util.Identifier;
 import net.legacyfabric.fabric.api.util.VersionUtils;
 import net.legacyfabric.fabric.impl.client.registry.sync.ClientRegistryRemapper;
@@ -44,7 +38,6 @@ import net.legacyfabric.fabric.impl.registry.sync.compat.RegistriesGetter;
 import net.legacyfabric.fabric.impl.registry.sync.compat.SimpleRegistryCompat;
 import net.legacyfabric.fabric.impl.registry.sync.remappers.RegistryRemapper;
 import net.legacyfabric.fabric.impl.registry.util.ArrayAndMapBasedRegistry;
-import net.legacyfabric.fabric.impl.registry.util.BiomePair;
 import net.legacyfabric.fabric.impl.registry.util.NumericalIdPair;
 
 @ApiStatus.Internal

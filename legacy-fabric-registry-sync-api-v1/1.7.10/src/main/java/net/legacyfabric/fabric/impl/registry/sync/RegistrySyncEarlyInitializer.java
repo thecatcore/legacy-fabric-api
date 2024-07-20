@@ -17,8 +17,6 @@
 
 package net.legacyfabric.fabric.impl.registry.sync;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
@@ -30,13 +28,8 @@ import net.minecraft.world.biome.Biome;
 
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;
 
-import net.legacyfabric.fabric.api.registry.v1.RegistryEntryRemapCallback;
-import net.legacyfabric.fabric.api.registry.v1.RegistryHelper;
-import net.legacyfabric.fabric.api.registry.v1.RegistryIds;
 import net.legacyfabric.fabric.api.util.Identifier;
 import net.legacyfabric.fabric.impl.registry.RegistryHelperImpl;
-import net.legacyfabric.fabric.impl.registry.registries.ReallyOldBiomeRegistry;
-import net.legacyfabric.fabric.impl.registry.registries.ReallyOldEnchantmentRegistry;
 import net.legacyfabric.fabric.impl.registry.sync.compat.RegistriesGetter;
 import net.legacyfabric.fabric.impl.registry.sync.compat.SimpleRegistryCompat;
 import net.legacyfabric.fabric.impl.registry.util.OldRemappedRegistry;

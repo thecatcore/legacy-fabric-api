@@ -20,9 +20,6 @@ package net.legacyfabric.fabric.testing;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.PlainsBiome;
-
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
@@ -53,6 +50,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.PlainsBiome;
 
 import net.fabricmc.api.ModInitializer;
 

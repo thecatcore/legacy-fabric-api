@@ -48,6 +48,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.PlainsBiome;
 
 import net.fabricmc.api.ModInitializer;
 
@@ -55,9 +57,6 @@ import net.legacyfabric.fabric.api.entity.EntityHelper;
 import net.legacyfabric.fabric.api.registry.v2.RegistryHelper;
 import net.legacyfabric.fabric.api.resource.ItemModelRegistry;
 import net.legacyfabric.fabric.api.util.Identifier;
-
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.PlainsBiome;
 
 
 public class TestMod implements ModInitializer {
