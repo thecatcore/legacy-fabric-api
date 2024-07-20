@@ -29,6 +29,7 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.Item;
 import net.minecraft.world.biome.Biome;
 
+import net.legacyfabric.fabric.api.biome.BiomeHelper;
 import net.legacyfabric.fabric.api.event.Event;
 import net.legacyfabric.fabric.api.event.EventFactory;
 import net.legacyfabric.fabric.api.registry.v2.registry.holder.RegistryEntry;
@@ -40,6 +41,7 @@ import net.legacyfabric.fabric.impl.registry.util.BiomePair;
 /**
  * Allows registration of Blocks, Items, Block Entity Classes, Status Effects and Enchantments.
  */
+@Deprecated
 public final class RegistryHelper {
 	public static final Map<Identifier, Event<RegistryInitialized>> IDENTIFIER_EVENT_MAP = new HashMap<>();
 
@@ -252,10 +254,9 @@ public final class RegistryHelper {
 			EntryCreator<Biome> parentBiome, Identifier parentId,
 			EntryCreator<Biome> mutatedBiome, Identifier mutatedId
 	) {
-		List<RegistryEntry<Biome>> list = net.legacyfabric.fabric.api.registry.v2.RegistryHelper.registerMultiple(
-				RegistryIds.BIOMES,
-				net.legacyfabric.fabric.api.registry.v2.RegistryHelper.createEntryCreator(parentId, parentBiome::create),
-				net.legacyfabric.fabric.api.registry.v2.RegistryHelper.createEntryCreator(mutatedId, mutatedBiome::create, 128)
+		List<RegistryEntry<Biome>> list = BiomeHelper.registerBiomeWithParent(
+				parentId, parentBiome::create,
+				mutatedId, (id, biome) -> mutatedBiome.create(id)
 		);
 
 		return new BiomePair(list.get(0).getValue(), list.get(1).getValue());
