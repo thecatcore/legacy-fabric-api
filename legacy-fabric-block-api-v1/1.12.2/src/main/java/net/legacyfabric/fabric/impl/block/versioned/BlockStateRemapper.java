@@ -48,7 +48,7 @@ public class BlockStateRemapper implements RegistryRemapCallback<Block> {
 
 			Identifier blockId = RegistryHelper.getId(Block.REGISTRY, block);
 
-			if (blockId.equals(specialCaseId) && hasSpecialCase) {
+			if (blockId.toString().equals(specialCaseId.toString()) && hasSpecialCase) {
 				for (int i = 0; i < 15; ++i) {
 					int blockStateId = blockRawId << 4 | i;
 					BlockState state = block.stateFromData(i);
