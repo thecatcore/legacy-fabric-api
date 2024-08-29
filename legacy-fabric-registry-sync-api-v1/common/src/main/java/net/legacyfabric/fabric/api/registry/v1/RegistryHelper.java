@@ -38,6 +38,8 @@ import net.legacyfabric.fabric.api.util.Identifier;
 import net.legacyfabric.fabric.api.util.SinceMC;
 import net.legacyfabric.fabric.impl.registry.util.BiomePair;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 /**
  * Allows registration of Blocks, Items, Block Entity Classes, Status Effects and Enchantments.
  */
@@ -254,12 +256,13 @@ public final class RegistryHelper {
 			EntryCreator<Biome> parentBiome, Identifier parentId,
 			EntryCreator<Biome> mutatedBiome, Identifier mutatedId
 	) {
-		List<RegistryEntry<Biome>> list = BiomeHelper.registerBiomeWithParent(
-				parentId, parentBiome::create,
-				mutatedId, (id, biome) -> mutatedBiome.create(id)
-		);
-
-		return new BiomePair(list.get(0).getValue(), list.get(1).getValue());
+//		List<RegistryEntry<Biome>> list = BiomeHelper.registerBiomeWithParent(
+//				parentId, parentBiome::create,
+//				mutatedId, (id, biome) -> mutatedBiome.create(id)
+//		);
+//
+//		return new BiomePair(list.get(0).getValue(), list.get(1).getValue());
+		throw new NotImplementedException("Registering biome with parent is currently not implemented before 1.9");
 	}
 
 	public static Biome getBiome(Identifier id) {

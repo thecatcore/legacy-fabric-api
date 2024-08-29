@@ -17,23 +17,23 @@
 
 package net.legacyfabric.fabric.api.biome;
 
-import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
-import net.minecraft.world.biome.Biome;
-
-import net.legacyfabric.fabric.api.registry.v2.RegistryHelper;
-import net.legacyfabric.fabric.api.registry.v2.RegistryIds;
-import net.legacyfabric.fabric.api.registry.v2.registry.holder.RegistryEntry;
-import net.legacyfabric.fabric.api.util.Identifier;
+//import java.util.List;
+//import java.util.function.BiFunction;
+//import java.util.function.Function;
+//
+//import net.minecraft.world.biome.Biome;
+//
+//import net.legacyfabric.fabric.api.registry.v2.RegistryHelper;
+//import net.legacyfabric.fabric.api.registry.v2.RegistryIds;
+//import net.legacyfabric.fabric.api.registry.v2.registry.holder.RegistryEntry;
+//import net.legacyfabric.fabric.api.util.Identifier;
 
 public class BiomeHelper {
-	public static List<RegistryEntry<Biome>> registerBiomeWithParent(Identifier parentId, Function<Integer, Biome> parentGetter, Identifier biomeId, BiFunction<Integer, Biome, Biome> biomeGetter) {
-		return RegistryHelper.registerMultiple(
-				RegistryIds.BIOMES,
-				RegistryHelper.createEntryCreator(parentId, parentGetter),
-				RegistryHelper.createEntryCreator(biomeId, id -> biomeGetter.apply(id, RegistryHelper.getValue(RegistryIds.BIOMES, parentId)), 128)
-		);
-	}
+//	public static List<RegistryEntry<Biome>> registerBiomeWithParent(Identifier parentId, Function<Integer, Biome> parentGetter, Identifier biomeId, BiFunction<Integer, Biome, Biome> biomeGetter) {
+//		return RegistryHelper.registerMultiple(
+//				RegistryIds.BIOMES,
+//				RegistryHelper.createEntryCreator(parentId, parentGetter),
+//				RegistryHelper.createEntryCreator(biomeId, id -> biomeGetter.apply(id, RegistryHelper.getValue(RegistryIds.BIOMES, parentId)), 128)
+//		);
+//	}
 }
