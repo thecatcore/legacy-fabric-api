@@ -18,20 +18,24 @@
 package net.legacyfabric.fabric.api.entity;
 
 import net.ornithemc.osl.core.api.util.NamespacedIdentifier;
+import net.ornithemc.osl.entities.api.EntityTypeRegistry;
 
 import net.legacyfabric.fabric.api.util.Identifier;
 
-import net.ornithemc.osl.entities.api.EntityTypeRegistry;
-
+@Deprecated
 public interface EntityHelper {
 	/**
-	 * @deprecated Use {@link #registerSpawnEgg(NamespacedIdentifier, int, int)} instead.
+	 * @deprecated Use {@link EntityTypeRegistry#registerSpawnEggData(NamespacedIdentifier, int, int)}
 	 */
 	@Deprecated
 	static void registerSpawnEgg(Identifier identifier, int color0, int color1) {
 		registerSpawnEgg((NamespacedIdentifier) identifier, color0, color1);
 	}
 
+	/**
+	 * @deprecated Use {@link EntityTypeRegistry#registerSpawnEggData(NamespacedIdentifier, int, int)}
+	 */
+	@Deprecated
 	static void registerSpawnEgg(NamespacedIdentifier identifier, int color0, int color1) {
 		EntityTypeRegistry.registerSpawnEggData(identifier, color0, color1);
 	}

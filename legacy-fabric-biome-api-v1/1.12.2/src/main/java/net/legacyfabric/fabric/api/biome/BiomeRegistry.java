@@ -27,6 +27,10 @@ import net.ornithemc.osl.registries.api.registry.ResourceKey;
 
 import net.minecraft.world.biome.Biome;
 
+/**
+ * @deprecated Use {@link net.ornithemc.osl.biomes.api.BiomeRegistry}
+ */
+@Deprecated
 public final class BiomeRegistry {
 	public static final ResourceKey<Registry<Biome>> KEY = RegistryKeys.BIOME;
 	public static final Registry<Biome> REGISTRY = BiomeRegistryImpl.REGISTRY;

@@ -21,6 +21,7 @@ import net.ornithemc.osl.registries.api.registry.Registry;
 
 import net.minecraft.world.biome.Biome;
 
+@Deprecated
 public interface BiomeExtension extends net.ornithemc.osl.biomes.api.biome.BiomeExtension {
 	/**
 	 * @deprecated Use {@link net.ornithemc.osl.biomes.api.biome.BiomeExtension#REGISTRY}

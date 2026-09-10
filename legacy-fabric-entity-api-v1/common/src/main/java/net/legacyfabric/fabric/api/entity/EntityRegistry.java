@@ -27,6 +27,10 @@ import net.ornithemc.osl.registries.api.registry.ResourceKey;
 
 import net.minecraft.entity.Entity;
 
+/**
+ * @deprecated Use {@link EntityTypeRegistry}
+ */
+@Deprecated
 public final class EntityRegistry {
 	public static final ResourceKey<Registry<Class<? extends Entity>>> KEY = RegistryKeys.ENTITY_TYPE;
 	public static final Registry<Class<? extends Entity>> REGISTRY = EntityTypeRegistry.REGISTRY;
