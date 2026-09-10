@@ -21,62 +21,21 @@ import java.util.Map;
 
 import net.ornithemc.osl.core.api.util.NamespacedIdentifier;
 import net.ornithemc.osl.core.api.util.NamespacedIdentifiers;
-import net.ornithemc.osl.registries.api.registry.SyncedRegistries;
-import net.ornithemc.osl.registries.api.registry.sync.IntegerMapMapper;
+import net.ornithemc.osl.entities.api.EntityTypeRegistry;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.entity.Entities;
 import net.minecraft.entity.Entity;
-
-import net.legacyfabric.fabric.api.entity.EntityRegistry;
-import net.legacyfabric.fabric.impl.entity.versionned.EntityRegistryImpl;
 
 @Mixin(Entities.class)
 public class EntitiesMixin {
 	@Shadow
 	@Final
 	private static Map<Class<? extends Entity>, String> TYPE_TO_KEY;
-	@Shadow
-	@Final
-	private static Map<Integer, Class<? extends Entity>> ID_TO_TYPE;
-	@Shadow
-	@Final
-	private static Map<Class<? extends Entity>, Integer> TYPE_TO_ID;
-	@Shadow
-	@Final
-	private static Map<String, Integer> KEY_TO_ID;
-
-	@Inject(method = "<clinit>", at = @At("HEAD"))
-	private static void lf$unlockRegistry(CallbackInfo ci) {
-		EntityRegistryImpl.unlock();
-	}
-
-	@Inject(method = "<clinit>", at = @At("RETURN"))
-	private static void registerRegistry(CallbackInfo ci) {
-		EntityRegistryImpl.registerEntityTypes();
-
-		SyncedRegistries.registerMapper(EntityRegistryImpl.KEY, NamespacedIdentifiers.parse("entity_type/id_to_type"), IntegerMapMapper.of(ID_TO_TYPE));
-		SyncedRegistries.registerFixer(EntityRegistryImpl.KEY, NamespacedIdentifiers.parse("entity_type/type_to_id"), () -> {
-			TYPE_TO_ID.clear();
-
-			for (Map.Entry<Integer, Class<? extends Entity>> entry : ID_TO_TYPE.entrySet()) {
-				TYPE_TO_ID.put(entry.getValue(), entry.getKey());
-			}
-		});
-		SyncedRegistries.registerFixer(EntityRegistryImpl.KEY, NamespacedIdentifiers.parse("entity_type/key_to_id"), () -> {
-			KEY_TO_ID.clear();
-
-			for (Map.Entry<Integer, Class<? extends Entity>> entry : ID_TO_TYPE.entrySet()) {
-				KEY_TO_ID.put(TYPE_TO_KEY.get(entry.getValue()), entry.getKey());
-			}
-		});
-	}
 
 	@ModifyArg(method = {"createSilently", "create(Lnet/minecraft/nbt/NbtCompound;Lnet/minecraft/world/World;)Lnet/minecraft/entity/Entity;", "getId(Ljava/lang/String;)I"},
 			at = @At(value = "INVOKE", target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;", remap = false))
@@ -85,7 +44,7 @@ public class EntitiesMixin {
 
 		if (key.contains(":")) {
 			NamespacedIdentifier identifier = NamespacedIdentifiers.parse(key);
-			Class<? extends Entity> clazz = EntityRegistry.getEntityType(identifier);
+			Class<? extends Entity> clazz = EntityTypeRegistry.getEntityType(identifier);
 
 			if (clazz != null) {
 				key = TYPE_TO_KEY.get(clazz);

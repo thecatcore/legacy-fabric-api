@@ -20,7 +20,8 @@ package net.legacyfabric.fabric.api.entity;
 import net.ornithemc.osl.core.api.util.NamespacedIdentifier;
 
 import net.legacyfabric.fabric.api.util.Identifier;
-import net.legacyfabric.fabric.impl.entity.versionned.EntityHelperImpl;
+
+import net.ornithemc.osl.entities.api.EntityTypeRegistry;
 
 public interface EntityHelper {
 	/**
@@ -28,10 +29,10 @@ public interface EntityHelper {
 	 */
 	@Deprecated
 	static void registerSpawnEgg(Identifier identifier, int color0, int color1) {
-		EntityHelperImpl.registerSpawnEgg(identifier, color0, color1);
+		registerSpawnEgg((NamespacedIdentifier) identifier, color0, color1);
 	}
 
 	static void registerSpawnEgg(NamespacedIdentifier identifier, int color0, int color1) {
-		EntityHelperImpl.registerSpawnEgg(identifier, color0, color1);
+		EntityTypeRegistry.registerSpawnEggData(identifier, color0, color1);
 	}
 }

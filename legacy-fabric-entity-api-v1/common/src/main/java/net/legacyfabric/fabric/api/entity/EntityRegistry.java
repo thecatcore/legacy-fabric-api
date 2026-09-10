@@ -20,54 +20,54 @@ package net.legacyfabric.fabric.api.entity;
 import java.util.Set;
 
 import net.ornithemc.osl.core.api.util.NamespacedIdentifier;
+import net.ornithemc.osl.entities.api.EntityTypeRegistry;
 import net.ornithemc.osl.registries.api.registry.Registry;
+import net.ornithemc.osl.registries.api.registry.RegistryKeys;
 import net.ornithemc.osl.registries.api.registry.ResourceKey;
 
 import net.minecraft.entity.Entity;
 
-import net.legacyfabric.fabric.impl.entity.versionned.EntityRegistryImpl;
-
 public final class EntityRegistry {
-	public static final ResourceKey<Registry<Class<? extends Entity>>> KEY = EntityRegistryImpl.KEY;
-	public static final Registry<Class<? extends Entity>> REGISTRY = EntityRegistryImpl.REGISTRY;
+	public static final ResourceKey<Registry<Class<? extends Entity>>> KEY = RegistryKeys.ENTITY_TYPE;
+	public static final Registry<Class<? extends Entity>> REGISTRY = EntityTypeRegistry.REGISTRY;
 
 	public static int getId(Class<? extends Entity> type) {
-		return EntityRegistryImpl.getId(type);
+		return EntityTypeRegistry.getId(type);
 	}
 
 	public static NamespacedIdentifier getIdentifier(Class<? extends Entity> type) {
-		return EntityRegistryImpl.getIdentifier(type);
+		return EntityTypeRegistry.getIdentifier(type);
 	}
 
 	public static ResourceKey<Class<? extends Entity>> getKey(Class<? extends Entity> type) {
-		return EntityRegistryImpl.getKey(type);
+		return EntityTypeRegistry.getKey(type);
 	}
 
 	public static Class<? extends Entity> getEntityType(int id) {
-		return EntityRegistryImpl.getEntityType(id);
+		return EntityTypeRegistry.getEntityType(id);
 	}
 
 	public static Class<? extends Entity> getEntityType(NamespacedIdentifier identifier) {
-		return EntityRegistryImpl.getEntityType(identifier);
+		return EntityTypeRegistry.getEntityType(identifier);
 	}
 
 	public static Class<? extends Entity> getEntityType(ResourceKey<Class<? extends Entity>> key) {
-		return EntityRegistryImpl.getEntityType(key);
+		return EntityTypeRegistry.getEntityType(key);
 	}
 
 	public static Set<NamespacedIdentifier> identifierSet() {
-		return EntityRegistryImpl.identifierSet();
+		return EntityTypeRegistry.identifierSet();
 	}
 
 	public static Set<ResourceKey<Class<? extends Entity>>> keySet() {
-		return EntityRegistryImpl.keySet();
+		return EntityTypeRegistry.keySet();
 	}
 
 	public static <T extends Entity> Class<T> register(NamespacedIdentifier identifier, Class<T> type) {
-		return EntityRegistryImpl.register(identifier, type);
+		return EntityTypeRegistry.register(identifier, type);
 	}
 
 	public static <T extends Entity> Class<T> register(ResourceKey<Class<? extends Entity>> key, Class<T> type) {
-		return EntityRegistryImpl.register(key, type);
+		return EntityTypeRegistry.register(key, type);
 	}
 }
