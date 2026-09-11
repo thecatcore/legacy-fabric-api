@@ -30,6 +30,8 @@ import net.ornithemc.osl.blocks.api.BlockEvents;
 import net.ornithemc.osl.blocks.api.BlockRegistry;
 import net.ornithemc.osl.core.api.util.NamespacedIdentifier;
 import net.ornithemc.osl.core.api.util.NamespacedIdentifiers;
+import net.ornithemc.osl.entities.api.EntityEvents;
+import net.ornithemc.osl.entities.api.EntityTypeRegistry;
 import net.ornithemc.osl.entrypoints.api.ModInitializer;
 import net.ornithemc.osl.items.api.ItemEvents;
 import net.ornithemc.osl.items.api.ItemRegistry;
@@ -46,6 +48,7 @@ public class RegistryTest implements ModInitializer {
 		ItemEvents.REGISTER_ITEMS.register(this::registerItems);
 		this.registerBlocks();
 		this.registerBlockEntities();
+		EntityEvents.REGISTER_ENTITY_TYPES.register(this::registerEntities);
 		BiomeEvents.REGISTER_BIOMES.register(this::registerBiomes);
 	}
 
@@ -95,6 +98,12 @@ public class RegistryTest implements ModInitializer {
 		BlockEntityEvents.REGISTER_BLOCK_ENTITY_TYPES.register(() -> {
 			BlockEntityTypeRegistry.register(identifier, TestBlockEntity.class);
 		});
+	}
+
+	private void registerEntities() {
+		NamespacedIdentifier creeperId = NamespacedIdentifiers.from("legacy-fabric-api", "test_entity");
+		EntityTypeRegistry.register(creeperId, TestCreeperEntity.class);
+		EntityTypeRegistry.registerSpawnEggData(creeperId, 12222, 563933);
 	}
 
 	private void registerBiomes() {
