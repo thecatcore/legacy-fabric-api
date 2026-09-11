@@ -20,7 +20,10 @@ package net.legacyfabric.fabric.test.registry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicReference;
 
+import net.ornithemc.osl.blockentities.api.BlockEntityEvents;
+import net.ornithemc.osl.blockentities.api.BlockEntityTypeRegistry;
 import net.ornithemc.osl.blocks.api.BlockEvents;
 import net.ornithemc.osl.blocks.api.BlockRegistry;
 import net.ornithemc.osl.core.api.util.NamespacedIdentifier;
@@ -40,6 +43,7 @@ public class RegistryTest implements ModInitializer {
 	public void init() {
 		ItemEvents.REGISTER_ITEMS.register(this::registerItems);
 		this.registerBlocks();
+		this.registerBlockEntities();
 	}
 
 	private void registerItems() {
@@ -71,6 +75,22 @@ public class RegistryTest implements ModInitializer {
 			for (Object o : blockList) {
 				BlockItem item = ItemRegistry.register((Block) o);
 			}
+		});
+	}
+
+	private void registerBlockEntities() {
+		NamespacedIdentifier identifier = NamespacedIdentifiers.from("legacy-fabric-api", "test_block_entity");
+
+		AtomicReference<Block> blockWithEntity = new AtomicReference<>();
+		BlockEvents.REGISTER_BLOCKS.register(() -> {
+			blockWithEntity.set(new TestBlockWithEntity(Material.DIRT).setCreativeModeTab(CreativeModeTab.FOOD));
+			BlockRegistry.register(identifier, blockWithEntity.get());
+		});
+
+		ItemEvents.REGISTER_BLOCK_ITEMS.register(() -> ItemRegistry.register(blockWithEntity.get()));
+
+		BlockEntityEvents.REGISTER_BLOCK_ENTITY_TYPES.register(() -> {
+			BlockEntityTypeRegistry.register(identifier, TestBlockEntity.class);
 		});
 	}
 }
