@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
 
+import net.ornithemc.osl.biomes.api.BiomeEvents;
+import net.ornithemc.osl.biomes.api.BiomeRegistry;
 import net.ornithemc.osl.blockentities.api.BlockEntityEvents;
 import net.ornithemc.osl.blockentities.api.BlockEntityTypeRegistry;
 import net.ornithemc.osl.blocks.api.BlockEvents;
@@ -44,6 +46,7 @@ public class RegistryTest implements ModInitializer {
 		ItemEvents.REGISTER_ITEMS.register(this::registerItems);
 		this.registerBlocks();
 		this.registerBlockEntities();
+		BiomeEvents.REGISTER_BIOMES.register(this::registerBiomes);
 	}
 
 	private void registerItems() {
@@ -92,5 +95,14 @@ public class RegistryTest implements ModInitializer {
 		BlockEntityEvents.REGISTER_BLOCK_ENTITY_TYPES.register(() -> {
 			BlockEntityTypeRegistry.register(identifier, TestBlockEntity.class);
 		});
+	}
+
+	private void registerBiomes() {
+		NamespacedIdentifier biomeId = NamespacedIdentifiers.from("legacy-fabric-api", "test_biome");
+		BiomeRegistry.register(biomeId, new TestBiome()
+				.setBaseColor(4446496)
+				.setTemperatureAndDownfall(0.3F, 0.7F)
+				.setName(biomeId.namespace() + "." + biomeId.identifier())
+		);
 	}
 }
